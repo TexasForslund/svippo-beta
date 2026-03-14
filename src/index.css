@@ -1,0 +1,141 @@
+/* ===== DESIGN SYSTEM ===== */
+:root {
+  /* Färger */
+  --color-primary: #066696;      /* Blå – utförare / huvudfärg */
+  --color-orange: #E85D46;       /* Orange – beställare / förfrågningar */
+  --color-blue-light: #2684F3;   /* Ljusblå – knappar */
+  --color-dark: #05334A;         /* Mörkblå – rubriker */
+  --color-bg: #F0F8FF;           /* Bakgrund – himmelblå ton */
+  --color-white: #FFFFFF;
+  --color-gray: #6B7280;
+  --color-gray-light: #F3F4F6;
+  --color-border: #E5E7EB;
+
+  /* Typsnitt */
+  --font-main: 'Inter', sans-serif;
+  --font-display: 'ff-cocon-pro', sans-serif; /* Svippos font – rubriker & display */
+
+  /* Rundning */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+
+  /* Skuggor */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-bg);
+  color: var(--color-dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== TYPOGRAFI ===== */
+h1, h2, h3, h4 {
+  color: var(--color-dark);
+  line-height: 1.2;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ===== KNAPPAR ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: var(--color-blue-light);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1a6fd4;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-orange {
+  background: var(--color-orange);
+  color: white;
+}
+
+.btn-orange:hover {
+  background: #d14a35;
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.btn-outline:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.btn-outline-white {
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(255,255,255,0.4);
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-outline-white:hover {
+  border-color: white;
+  background: rgba(255,255,255,0.1);
+}
+
+/* ===== KORT ===== */
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* ===== LAYOUT ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}

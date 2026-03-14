@@ -1,0 +1,215 @@
+.orders {
+  padding: 48px 0 80px;
+  min-height: calc(100vh - 68px);
+}
+
+.orders-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 68px);
+  color: var(--color-gray);
+}
+
+.orders__inner {
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.orders__header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.orders__title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.orders__subtitle {
+  font-size: 15px;
+  color: var(--color-gray);
+}
+
+/* Tabbar */
+.orders__tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 2px solid var(--color-border);
+  padding-bottom: 0;
+}
+
+.orders__tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-gray);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-main);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+
+.orders__tab:hover {
+  color: var(--color-dark);
+}
+
+.orders__tab--active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.orders__tab-badge {
+  background: var(--color-primary);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+}
+
+.orders__tab-badge--green {
+  background: #1a7a4a;
+}
+
+.orders__tab-badge--red {
+  background: var(--color-orange);
+}
+
+/* Lista */
+.orders__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.orders__empty {
+  text-align: center;
+  padding: 48px;
+  color: var(--color-gray);
+  font-size: 15px;
+}
+
+/* Kort */
+.order-card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.order-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.order-card__service {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.order-card__date {
+  font-size: 13px;
+  color: var(--color-gray);
+  margin-top: 4px;
+}
+
+.order-card__status {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.order-card__status--pending {
+  background: #fff8e1;
+  color: #b45309;
+}
+
+.order-card__status--accepted {
+  background: #e6f9f0;
+  color: #1a7a4a;
+}
+
+.order-card__status--rejected {
+  background: #fdecea;
+  color: var(--color-orange);
+}
+
+/* Beställare */
+.order-card__buyer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--color-gray-light);
+  border-radius: var(--radius-md);
+}
+
+.order-card__buyer-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.order-card__buyer strong {
+  font-size: 15px;
+  color: var(--color-dark);
+  display: block;
+}
+
+.order-card__buyer-contact {
+  font-size: 13px;
+  color: var(--color-gray);
+  margin-top: 2px;
+  display: flex;
+  gap: 6px;
+}
+
+.order-card__buyer-contact a {
+  color: var(--color-primary);
+}
+
+.order-card__buyer-contact a:hover {
+  text-decoration: underline;
+}
+
+/* Meddelande */
+.order-card__message {
+  font-size: 15px;
+  color: var(--color-dark);
+  line-height: 1.6;
+  padding: 16px;
+  border-left: 3px solid var(--color-primary);
+  background: #f0f8ff;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* Knappar */
+.order-card__actions {
+  display: flex;
+  gap: 12px;
+}
