@@ -1,0 +1,161 @@
+.tjanster {
+  padding: 48px 0 80px;
+  min-height: calc(100vh - 68px);
+}
+
+.tjanster__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.tjanster__header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.tjanster__title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.tjanster__subtitle {
+  font-size: 14px;
+  color: var(--color-gray);
+}
+
+/* Sök & filter */
+.tjanster__filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tjanster__search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 12px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.tjanster__search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  font-family: var(--font-main);
+  color: var(--color-dark);
+  outline: none;
+}
+
+.tjanster__search-input::placeholder {
+  color: var(--color-gray);
+}
+
+.tjanster__clear-search {
+  background: none;
+  border: none;
+  color: var(--color-gray);
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.tjanster__clear-search:hover {
+  color: var(--color-dark);
+}
+
+.tjanster__filter-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tjanster__select {
+  padding: 10px 16px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-border);
+  background: white;
+  font-size: 14px;
+  font-family: var(--font-main);
+  color: var(--color-dark);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.tjanster__select:focus {
+  border-color: var(--color-primary);
+}
+
+.tjanster__clear-btn {
+  padding: 10px 16px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-orange);
+  background: transparent;
+  color: var(--color-orange);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-main);
+  transition: all 0.2s;
+}
+
+.tjanster__clear-btn:hover {
+  background: var(--color-orange);
+  color: white;
+}
+
+/* Aktiva filter-taggar */
+.tjanster__active-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tjanster__filter-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: #e0f0fa;
+  color: var(--color-primary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.tjanster__filter-tag button {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+  line-height: 1;
+}
+
+/* Lista */
+.tjanster__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tjanster__loading,
+.tjanster__empty {
+  text-align: center;
+  padding: 64px;
+  color: var(--color-gray);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
