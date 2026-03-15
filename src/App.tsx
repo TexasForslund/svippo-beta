@@ -15,6 +15,7 @@ import RequestDetail from './pages/RequestDetail'
 import Interests from './pages/Interests'
 import PublicProfile from './pages/PublicProfile'
 import OrderDetail from './pages/OrderDetail'
+import Notifications from './pages/Notifications'
 
 
 
@@ -38,6 +39,7 @@ function App() {
         <Route path="/intresseanmalningar" element={<Interests />} />
         <Route path="/svippare/:id" element={<PublicProfile />} />
         <Route path="/bestallning/:id" element={<OrderDetail />} />
+        <Route path="/notifikationer" element={<Notifications />} />
       </Routes>
       <Footer />
     </BrowserRouter>

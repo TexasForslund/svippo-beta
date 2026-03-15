@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { signOut } from 'firebase/auth'
-import { useState } from 'react'
+import { collection, query, where, getDocs } from 'firebase/firestore'
 import { auth } from '../firebase'
+import { db } from '../firebase'
 import useAuth from '../hooks/useAuth'
 import CreateModal from './CreateModal'
 import './Navbar.css'
@@ -10,6 +13,26 @@ import logo from '../assets/logo.svg'
 function Navbar() {
   const { user, loading } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
+  const location = useLocation()
+  const [unreadCount, setUnreadCount] = useState(0)
+  useEffect(() => {
+    if (!user) return
+    const fetchUnread = async () => {
+      try {
+        const q = query(
+          collection(db, 'notifications'),
+          where('userId', '==', user.uid),
+          where('read', '==', false)
+        )
+        const snap = await getDocs(q)
+        setUnreadCount(snap.size)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    fetchUnread()
+  }, [user, location]) // ← lägg till location här
+
   const [showCreate, setShowCreate] = useState(false)
 
   const handleSignOut = async () => {
@@ -44,6 +67,12 @@ function Navbar() {
             <>
               {user ? (
                 <>
+                  <Link to="/notifikationer" className="navbar__notif-btn">
+                    🔔
+                    {unreadCount > 0 && (
+                      <span className="navbar__notif-badge">{unreadCount}</span>
+                    )}
+                  </Link>
                   <button
                     className="btn btn-orange"
                     onClick={() => setShowCreate(true)}

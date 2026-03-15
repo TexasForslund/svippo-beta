@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { updateProfile } from 'firebase/auth'
-import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore'
+import { doc, getDoc, setDoc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 import useAuth from '../hooks/useAuth'
 import type { Timestamp } from 'firebase/firestore'
@@ -263,24 +263,33 @@ function Profile() {
                     <div className="profile__notification-content">
                       <p>{notif.message}</p>
                     </div>
-                    {notif.type === 'project_completed' && (
-                      <Link
-                        to={`/bestallning/${notif.orderId}`}
-                        className="btn btn-primary"
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
+                      {notif.type === 'project_completed' && (
+                        <Link to={`/bestallning/${notif.orderId}`} className="btn btn-primary">
+                          Lämna recension
+                        </Link>
+                      )}
+                      {notif.type === 'request_review' && (
+                        <Link to={`/bestallning/${notif.orderId}`} className="btn btn-orange">
+                          Ta betalt
+                        </Link>
+                      )}
+                      <button
+                        className="notifications__dismiss"
+                        onClick={async () => {
+                          await updateDoc(doc(db, 'notifications', notif.id), { read: true })
+                          setNotifications(prev => prev.filter(n => n.id !== notif.id))
+                        }}
+                        title="Kryssa ner"
                       >
-                        Lämna recension
-                      </Link>
-                    )}
-                    {notif.type === 'request_review' && (
-                      <Link
-                        to={`/bestallning/${notif.orderId}`}
-                        className="btn btn-orange"
-                      >
-                        Ta betalt
-                      </Link>
-                    )}
+                        ✕
+                      </button>
+                    </div>
                   </div>
                 ))}
+                <Link to="/notifikationer" className="profile__notif-all">
+                  Se alla notifikationer →
+                </Link>
               </div>
             )}
 
