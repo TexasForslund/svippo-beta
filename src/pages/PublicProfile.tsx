@@ -30,6 +30,8 @@ function PublicProfile() {
   const { id } = useParams()
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [services, setServices] = useState<Service[]>([])
+  const [avgRating, setAvgRating] = useState<number | null>(null)
+  const [reviewCount, setReviewCount] = useState(0)
   const [loading, setLoading] = useState(true)
   const [contactName, setContactName] = useState('')
   const [contactEmail, setContactEmail] = useState('')
@@ -49,6 +51,21 @@ function PublicProfile() {
           query(collection(db, 'services'), where('userId', '==', id))
         )
         setServices(servicesSnap.docs.map(d => ({ id: d.id, ...d.data() })) as Service[])
+
+        const reviewsSnap = await getDocs(
+          query(
+            collection(db, 'reviews'),
+            where('revieweeId', '==', id),
+            where('role', '==', 'buyer')
+          )
+        )
+        const reviewDocs = reviewsSnap.docs.map(d => d.data())
+        setReviewCount(reviewDocs.length)
+        if (reviewDocs.length > 0) {
+          const avg = reviewDocs.reduce((sum, r) => sum + (r.rating as number), 0) / reviewDocs.length
+          setAvgRating(Math.round(avg * 10) / 10)
+        }
+
       } catch (err) {
         console.error(err)
       } finally {
@@ -156,7 +173,11 @@ function PublicProfile() {
                 <span>Utförda uppdrag</span>
               </div>
               <div className="pubprofile__stat">
-                <strong>–</strong>
+                <strong>{reviewCount}</strong>
+                <span>Recensioner</span>
+              </div>
+              <div className="pubprofile__stat">
+                <strong>{avgRating !== null ? `⭐ ${avgRating}` : '–'}</strong>
                 <span>Snittbetyg</span>
               </div>
             </div>

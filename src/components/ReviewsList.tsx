@@ -15,7 +15,6 @@ type Review = {
 
 type Props = {
   userId: string
-  role?: 'seller' | 'buyer'
 }
 
 function StarDisplay({ rating }: { rating: number }) {
@@ -33,7 +32,7 @@ function StarDisplay({ rating }: { rating: number }) {
   )
 }
 
-function ReviewsList({ userId, role = 'seller' }: Props) {
+function ReviewsList({ userId }: Props) {
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
   const [avgRating, setAvgRating] = useState(0)
@@ -44,7 +43,7 @@ function ReviewsList({ userId, role = 'seller' }: Props) {
         const q = query(
           collection(db, 'reviews'),
           where('revieweeId', '==', userId),
-          where('role', '==', 'buyer') // recensioner skrivna av köpare = om säljaren
+          where('role', '==', 'buyer')
         )
         const snapshot = await getDocs(q)
         const data = snapshot.docs.map(d => ({
@@ -52,14 +51,12 @@ function ReviewsList({ userId, role = 'seller' }: Props) {
           ...d.data()
         })) as Review[]
 
-        // Sortera nyast först
         data.sort((a, b) =>
           b.createdAt?.toDate().getTime() - a.createdAt?.toDate().getTime()
         )
 
         setReviews(data)
 
-        // Beräkna snittbetyg
         if (data.length > 0) {
           const avg = data.reduce((sum, r) => sum + r.rating, 0) / data.length
           setAvgRating(Math.round(avg * 10) / 10)

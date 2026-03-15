@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { collection, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore'
+import { collection, addDoc, serverTimestamp, doc, updateDoc, query, where, getDocs } from 'firebase/firestore'
 import { db } from '../firebase'
 import useAuth from '../hooks/useAuth'
 import './ReviewModal.css'
@@ -22,12 +22,12 @@ function ReviewModal({ orderId, serviceId, serviceTitle, revieweeId, revieweeNam
   const [comment, setComment] = useState('')
   const [saving, setSaving] = useState(false)
 
-  const handleSubmit = async () => {
+    const handleSubmit = async () => {
     if (!user || rating === 0) return
     setSaving(true)
     try {
-      // Spara recensionen
-      await addDoc(collection(db, 'reviews'), {
+        // Spara recensionen
+        await addDoc(collection(db, 'reviews'), {
         orderId,
         serviceId,
         serviceTitle,
@@ -39,20 +39,40 @@ function ReviewModal({ orderId, serviceId, serviceTitle, revieweeId, revieweeNam
         rating,
         comment,
         createdAt: serverTimestamp(),
-      })
+        })
 
-      // Markera ordern som recenserad
-      await updateDoc(doc(db, 'orders', orderId), {
+        // Markera ordern som recenserad
+        await updateDoc(doc(db, 'orders', orderId), {
         [`${role}Reviewed`]: true,
-      })
+        })
 
-      onSuccess()
+        // Beräkna nytt snittbetyg och uppdatera tjänsten
+        if (role === 'buyer' && serviceId) {
+        const reviewsSnap = await getDocs(
+            query(
+            collection(db, 'reviews'),
+            where('serviceId', '==', serviceId),
+            where('role', '==', 'buyer')
+            )
+        )
+        const allRatings = reviewsSnap.docs.map(d => d.data().rating as number)
+        allRatings.push(rating) // lägg till den nya
+        const avg = allRatings.reduce((sum, r) => sum + r, 0) / allRatings.length
+        const rounded = Math.round(avg * 10) / 10
+
+        await updateDoc(doc(db, 'services', serviceId), {
+            rating: rounded,
+            reviews: allRatings.length,
+        })
+        }
+
+        onSuccess()
     } catch (err) {
-      console.error(err)
+        console.error(err)
     } finally {
-      setSaving(false)
+        setSaving(false)
     }
-  }
+    }
 
   return (
     <div className="review-overlay" onClick={onClose}>
