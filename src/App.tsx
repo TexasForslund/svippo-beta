@@ -16,6 +16,7 @@ import Interests from './pages/Interests'
 import PublicProfile from './pages/PublicProfile'
 import OrderDetail from './pages/OrderDetail'
 import Notifications from './pages/Notifications'
+import MyOrderDetail from './pages/MyOrderDetail'
 
 
 
@@ -40,6 +41,7 @@ function App() {
         <Route path="/svippare/:id" element={<PublicProfile />} />
         <Route path="/bestallning/:id" element={<OrderDetail />} />
         <Route path="/notifikationer" element={<Notifications />} />
+        <Route path="/min-bestallning/:id" element={<MyOrderDetail />} />
       </Routes>
       <Footer />
     </BrowserRouter>

@@ -793,3 +793,8 @@
 .profile__notif-all:hover {
   text-decoration: underline;
 }
+
+.profile__item-tag--completed {
+  background: #e6f9f0;
+  color: #1a7a4a;
+}

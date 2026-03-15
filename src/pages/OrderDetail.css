@@ -428,3 +428,11 @@
   width: 100%;
   justify-content: center;
 }
+
+
+.orderdetail__review {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

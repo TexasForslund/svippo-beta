@@ -1,0 +1,112 @@
+.review-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 24px;
+}
+
+.review-modal {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.review-modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.review-modal__title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.review-modal__subtitle {
+  font-size: 14px;
+  color: var(--color-gray);
+  margin-top: 4px;
+}
+
+/* Stjärnor */
+.review-modal__stars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.review-modal__stars-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.review-modal__star-row {
+  display: flex;
+  gap: 8px;
+}
+
+.review-modal__star {
+  font-size: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #d1d5db;
+  transition: all 0.15s;
+  padding: 0;
+  line-height: 1;
+}
+
+.review-modal__star--active {
+  color: #f59e0b;
+  transform: scale(1.1);
+}
+
+.review-modal__rating-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f59e0b;
+}
+
+/* Kommentar */
+.review-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.review-modal__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.review-modal__textarea {
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  font-size: 15px;
+  font-family: var(--font-main);
+  color: var(--color-dark);
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.2s;
+  line-height: 1.6;
+}
+
+.review-modal__textarea:focus {
+  border-color: var(--color-primary);
+}

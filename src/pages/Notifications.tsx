@@ -90,7 +90,7 @@ function Notifications() {
     if (notif.type === 'project_completed') {
       return (
         <Link
-          to={`/bestallning/${notif.orderId}`}
+          to={`/min-bestallning/${notif.orderId}`}  // ← ändra här
           className="btn btn-primary notifications__action-btn"
           onClick={() => handleMarkRead(notif.id)}
         >

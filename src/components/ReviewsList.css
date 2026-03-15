@@ -1,0 +1,137 @@
+.reviews__loading {
+  text-align: center;
+  padding: 32px;
+  color: var(--color-gray);
+}
+
+.reviews__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px;
+  text-align: center;
+  color: var(--color-gray);
+  background: white;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.reviews__empty span:first-child {
+  font-size: 40px;
+}
+
+.reviews__empty p {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+/* Snittbetyg */
+.reviews__summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 24px;
+  background: white;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  margin-bottom: 20px;
+}
+
+.reviews__avg {
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--color-dark);
+  line-height: 1;
+}
+
+.reviews__count {
+  font-size: 14px;
+  color: var(--color-gray);
+}
+
+/* Stjärnor */
+.reviews__stars {
+  display: flex;
+  gap: 2px;
+}
+
+.reviews__star {
+  font-size: 20px;
+  color: #d1d5db;
+}
+
+.reviews__star--active {
+  color: #f59e0b;
+}
+
+/* Grid */
+.reviews__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* Kort */
+.reviews__card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reviews__comment {
+  font-size: 14px;
+  color: var(--color-dark);
+  line-height: 1.6;
+  font-style: italic;
+  flex: 1;
+}
+
+.reviews__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+}
+
+.reviews__reviewer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reviews__reviewer-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.reviews__reviewer strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-dark);
+  display: block;
+}
+
+.reviews__reviewer span {
+  font-size: 12px;
+  color: var(--color-gray);
+}
+
+.reviews__date {
+  font-size: 12px;
+  color: var(--color-gray);
+  flex-shrink: 0;
+}

@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 import type { Timestamp } from 'firebase/firestore'
+import ReviewsList from '../components/ReviewsList'
 import './ServiceDetail.css'
 
 type Service = {
@@ -83,6 +84,11 @@ function ServiceDetail() {
             <div className="detail__section">
               <h2 className="detail__section-title">Om tjänsten</h2>
               <p className="detail__description">{service.description}</p>
+            </div>
+
+            <div className="detail__section">
+              <h2 className="detail__section-title">Recensioner</h2>
+              <ReviewsList userId={service.userId} />
             </div>
 
           </div>

@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 import type { Timestamp } from 'firebase/firestore'
+import ReviewsList from '../components/ReviewsList'
 import './PublicProfile.css'
 
 type UserProfile = {
@@ -212,12 +213,10 @@ function PublicProfile() {
 
         {/* Recensioner */}
         <section id="recensioner" className="pubprofile__section">
-          <h2 className="pubprofile__section-title">Recensioner</h2>
-          <div className="pubprofile__empty">
-            <span>⭐</span>
-            <p>Inga recensioner ännu.</p>
-            <span>Recensioner visas här när kunder lämnat feedback.</span>
-          </div>
+          <h2 className="pubprofile__section-title">
+            Recensioner
+          </h2>
+          <ReviewsList userId={id || ''} />
         </section>
 
         {/* Kontakt */}

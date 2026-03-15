@@ -5,6 +5,7 @@ import { doc, getDoc, setDoc, collection, query, where, getDocs, updateDoc } fro
 import { db } from '../firebase'
 import useAuth from '../hooks/useAuth'
 import type { Timestamp } from 'firebase/firestore'
+import ReviewsList from '../components/ReviewsList'
 import './Profile.css'
 
 type Section =
@@ -34,6 +35,7 @@ type Order = {
   buyerEmail: string
   message: string
   status: 'pending' | 'accepted' | 'rejected'
+  projectStatus?: string  // ← lägg till
   createdAt: Timestamp
 }
 
@@ -43,6 +45,7 @@ type PlacedOrder = {
   sellerName: string
   message: string
   status: 'pending' | 'accepted' | 'rejected'
+  projectStatus?: string
   createdAt: Timestamp
 }
 
@@ -265,7 +268,7 @@ function Profile() {
                     </div>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
                       {notif.type === 'project_completed' && (
-                        <Link to={`/bestallning/${notif.orderId}`} className="btn btn-primary">
+                        <Link to={`/min-bestallning/${notif.orderId}`} className="btn btn-primary">
                           Lämna recension
                         </Link>
                       )}
@@ -559,14 +562,16 @@ function Profile() {
               <div className="profile__list">
                 {incomingOrders.map(order => (
                   <Link to={`/bestallning/${order.id}`} key={order.id} className="profile__item card">
-                    <div className="profile__item-icon">📥</div>
+                    <div className="profile__item-icon">
+                      {order.projectStatus === 'completed' ? '✅' : order.status === 'pending' ? '⏳' : order.status === 'accepted' ? '🔄' : '❌'}
+                    </div>
                     <div className="profile__item-info">
                       <strong>{order.serviceTitle}</strong>
                       <span>Från: {order.buyerName} · {order.buyerEmail}</span>
                       <p className="profile__item-message">{order.message}</p>
                     </div>
-                    <span className={`profile__item-tag profile__item-tag--${order.status}`}>
-                      {order.status === 'pending' ? '⏳ Väntar' : order.status === 'accepted' ? '✅ Godkänd' : '❌ Nekad'}
+                    <span className={`profile__item-tag profile__item-tag--${order.projectStatus === 'completed' ? 'completed' : order.status}`}>
+                      {order.projectStatus === 'completed' ? '✅ Avslutat' : order.status === 'pending' ? '⏳ Väntar' : order.status === 'accepted' ? '🔄 Pågår' : '❌ Nekad'}
                     </span>
                   </Link>
                 ))}
@@ -591,17 +596,19 @@ function Profile() {
             ) : (
               <div className="profile__list">
                 {placedOrders.map(order => (
-                  <div key={order.id} className="profile__item card">
-                    <div className="profile__item-icon">📤</div>
+                  <Link to={`/min-bestallning/${order.id}`} key={order.id} className="profile__item card">
+                    <div className="profile__item-icon">
+                      {order.projectStatus === 'completed' ? '✅' : order.status === 'pending' ? '⏳' : order.status === 'accepted' ? '🔄' : '❌'}
+                    </div>
                     <div className="profile__item-info">
                       <strong>{order.serviceTitle}</strong>
                       <span>Utförare: {order.sellerName}</span>
                       <p className="profile__item-message">{order.message}</p>
                     </div>
-                    <span className={`profile__item-tag profile__item-tag--${order.status}`}>
-                      {order.status === 'pending' ? '⏳ Väntar' : order.status === 'accepted' ? '✅ Godkänd' : '❌ Nekad'}
+                    <span className={`profile__item-tag profile__item-tag--${order.projectStatus === 'completed' ? 'completed' : order.status}`}>
+                      {order.projectStatus === 'completed' ? '✅ Avslutat' : order.status === 'pending' ? '⏳ Väntar' : order.status === 'accepted' ? '🔄 Pågår' : '❌ Nekad'}
                     </span>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}
@@ -679,15 +686,10 @@ function Profile() {
           </div>
         )}
 
-        {/* RECENSIONER */}
         {activeSection === 'recensioner' && (
           <div className="profile__section">
             <h1 className="profile__section-title">Recensioner & betyg</h1>
-            <div className="profile__empty">
-              <span>⭐</span>
-              <p>Inga recensioner ännu.</p>
-              <span className="profile__empty-hint">Recensioner visas här när kunder lämnat feedback på dina tjänster.</span>
-            </div>
+            <ReviewsList userId={user.uid} />
           </div>
         )}
 

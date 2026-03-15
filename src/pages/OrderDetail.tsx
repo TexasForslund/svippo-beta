@@ -4,6 +4,7 @@ import { doc, getDoc, updateDoc, addDoc, collection, serverTimestamp } from 'fir
 import { db } from '../firebase'
 import useAuth from '../hooks/useAuth'
 import type { Timestamp } from 'firebase/firestore'
+import ReviewModal from '../components/ReviewModal'
 import './OrderDetail.css'
 
 type ProjectStatus = 'not_started' | 'in_progress' | 'almost_done' | 'completed'
@@ -35,6 +36,8 @@ function OrderDetail() {
   const [projectStatus, setProjectStatus] = useState<ProjectStatus>('not_started')
   const [paymentStatus, setPaymentStatus] = useState<'unpaid' | 'paid' | null>(null)
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false)
+  const [showReviewModal, setShowReviewModal] = useState(false)
+  const [reviewSuccess, setReviewSuccess] = useState(false)
 
   // Hämta order
   useEffect(() => {
@@ -64,12 +67,6 @@ function OrderDetail() {
     }
     }, [order])
 
-  // Behörighetskontroll
-  useEffect(() => {
-    if (order && user && user.uid !== order.sellerId) {
-      navigate('/profil')
-    }
-  }, [order, user, navigate])
 
   const handleStatus = async (status: 'accepted' | 'rejected') => {
     if (!order) return
@@ -145,6 +142,8 @@ function OrderDetail() {
       </button>
     </div>
   )
+
+  const isSeller = user?.uid === order.sellerId
 
   return (
     <div className={`orderdetail ${projectStatus === 'completed' ? 'orderdetail--completed' : ''}`}>
@@ -238,7 +237,8 @@ function OrderDetail() {
               </div>
             </div>
 
-            {/* Status & åtgärder */}
+            {/* Status & åtgärder – bara för säljaren */}
+            {isSeller && (
             <div className="orderdetail__actions card">
               <h2 className="orderdetail__section-title">⚡ Hantera beställning</h2>
               <div className={`orderdetail__current-status orderdetail__status--${order.status}`}>
@@ -272,9 +272,10 @@ function OrderDetail() {
                 </button>
               )}
             </div>
+            )}
 
             {/* Projektstatus */}
-            {order.status === 'accepted' && (
+            {order.status === 'accepted' && isSeller && (
               <div className="orderdetail__progress card">
                 <h2 className="orderdetail__section-title">📊 Projektstatus</h2>
                 <p className="orderdetail__progress-hint">
@@ -343,7 +344,7 @@ function OrderDetail() {
             )}
 
             {/* Betalning – visas när projektet är slutfört */}
-            {projectStatus === 'completed' && (
+            {projectStatus === 'completed' && isSeller && (
             <div className="orderdetail__payment card">
                 <h2 className="orderdetail__section-title">💰 Betalning</h2>
                 <p className="orderdetail__progress-hint">
@@ -373,6 +374,31 @@ function OrderDetail() {
                 </div>
                 )}
             </div>
+            )}
+
+            {/* Recension för säljaren */}
+            {projectStatus === 'completed' && isSeller && !reviewSuccess && (
+              <div className="orderdetail__review card">
+                <h2 className="orderdetail__section-title">⭐ Lämna en recension</h2>
+                <p className="orderdetail__progress-hint">
+                  Dela din upplevelse med {order.buyerName}.
+                </p>
+                <button
+                  className="btn btn-primary"
+                  style={{ width: '100%', justifyContent: 'center' }}
+                  onClick={() => setShowReviewModal(true)}
+                >
+                  ⭐ Recensera {order.buyerName}
+                </button>
+              </div>
+            )}
+
+            {reviewSuccess && (
+              <div className="orderdetail__review card">
+                <div className="orderdetail__payment-done">
+                  ⭐ Tack för din recension!
+                </div>
+              </div>
             )}
 
           </div>
@@ -424,6 +450,22 @@ function OrderDetail() {
 
           </div>
         </div>
+      )}
+
+      {showReviewModal && (
+        <ReviewModal
+          orderId={order.id}
+          serviceId={order.serviceId}
+          serviceTitle={order.serviceTitle}
+          revieweeId={isSeller ? order.buyerId : order.sellerId}
+          revieweeName={isSeller ? order.buyerName : order.sellerName}
+          role={isSeller ? 'seller' : 'buyer'}
+          onClose={() => setShowReviewModal(false)}
+          onSuccess={() => {
+            setShowReviewModal(false)
+            setReviewSuccess(true)
+          }}
+        />
       )}
 
     </div>
