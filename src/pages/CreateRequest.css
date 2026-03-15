@@ -58,3 +58,9 @@
   border-radius: var(--radius-md);
   margin-bottom: 8px;
 }
+
+.create__hint {
+  font-size: 12px;
+  color: var(--color-gray);
+  margin-top: 2px;
+}

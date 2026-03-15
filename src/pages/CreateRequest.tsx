@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase'
@@ -11,7 +11,9 @@ type FormData = {
   description: string
   categoryId: string
   subcategory: string
+  budgetType: 'fast' | 'prisforslag'
   budget: string
+  deadline: string
   location: string
   contactEmail: string
   imageBase64: string
@@ -32,11 +34,19 @@ function CreateRequest() {
     description: '',
     categoryId: '',
     subcategory: '',
+    budgetType: 'fast',
     budget: '',
+    deadline: '',
     location: '',
     contactEmail: user?.email || '',
     imageBase64: '',
   })
+
+  useEffect(() => {
+    if (user?.email) {
+      update('contactEmail', user.email)
+    }
+  }, [user])
 
   if (loading) return <div className="create-loading">Laddar...</div>
   if (!user) {
@@ -216,17 +226,76 @@ function CreateRequest() {
               <p className="create__subtitle">Vad är din budget och var ska jobbet utföras?</p>
 
               <div className="create__fields">
+
+                {/* Budgettyp */}
                 <div className="create__field">
-                  <label className="create__label">Budget (kr)</label>
-                  <input
-                    className="create__input"
-                    placeholder="T.ex. 2000"
-                    type="number"
-                    value={form.budget}
-                    onChange={e => update('budget', e.target.value)}
-                  />
+                  <label className="create__label">Hur vill du hantera priset?</label>
+                  <div className="create__price-types">
+                    <button
+                      type="button"
+                      className={`create__price-type-btn ${form.budgetType === 'fast' ? 'create__price-type-btn--active' : ''}`}
+                      onClick={() => update('budgetType', 'fast')}
+                    >
+                      💰 Sätt egen budget
+                    </button>
+                    <button
+                      type="button"
+                      className={`create__price-type-btn ${form.budgetType === 'prisforslag' ? 'create__price-type-btn--active' : ''}`}
+                      onClick={() => update('budgetType', 'prisforslag')}
+                    >
+                      📋 Be om prisförslag
+                    </button>
+                  </div>
                 </div>
 
+                {/* Budget – visas bara om fast */}
+                {form.budgetType === 'fast' && (
+                  <div className="create__field">
+                    <label className="create__label">Din budget (kr)</label>
+                    <input
+                      className="create__input"
+                      placeholder="T.ex. 2000"
+                      type="number"
+                      value={form.budget}
+                      onChange={e => update('budget', e.target.value)}
+                    />
+                  </div>
+                )}
+
+                {/* Deadline */}
+                <div className="create__field">
+                  <label className="create__label">Deadline</label>
+                  <div className="create__price-types">
+                    <button
+                      type="button"
+                      className={`create__price-type-btn ${form.deadline === 'ingen' ? 'create__price-type-btn--active' : ''}`}
+                      onClick={() => update('deadline', 'ingen')}
+                    >
+                      🕐 Ingen deadline
+                    </button>
+                    <button
+                      type="button"
+                      className={`create__price-type-btn ${form.deadline !== 'ingen' && form.deadline !== '' ? 'create__price-type-btn--active' : ''}`}
+                      onClick={() => update('deadline', new Date().toISOString().split('T')[0])}
+                    >
+                      📅 Sätt deadline
+                    </button>
+                  </div>
+
+                  {/* Datumväljare – visas bara om man valt deadline */}
+                  {form.deadline !== 'ingen' && form.deadline !== '' && (
+                    <input
+                      className="create__input"
+                      type="date"
+                      value={form.deadline}
+                      onChange={e => update('deadline', e.target.value)}
+                      min={new Date().toISOString().split('T')[0]}
+                      style={{ marginTop: '10px' }}
+                    />
+                  )}
+                </div>
+
+                {/* Plats */}
                 <div className="create__field">
                   <label className="create__label">Plats</label>
                   <input
@@ -237,6 +306,7 @@ function CreateRequest() {
                   />
                 </div>
 
+                {/* Kontakt */}
                 <div className="create__field">
                   <label className="create__label">Kontakt-e-post</label>
                   <input
@@ -247,6 +317,7 @@ function CreateRequest() {
                     onChange={e => update('contactEmail', e.target.value)}
                   />
                 </div>
+
               </div>
             </div>
           )}
@@ -280,7 +351,19 @@ function CreateRequest() {
                 </div>
                 <div className="create__review-row">
                   <span className="create__review-label">Budget</span>
-                  <span>{form.budget} kr</span>
+                  <span>
+                    {form.budgetType === 'prisforslag'
+                      ? 'Be om prisförslag'
+                      : `${form.budget} kr`}
+                  </span>
+                </div>
+                <div className="create__review-row">
+                  <span className="create__review-label">Deadline</span>
+                  <span>
+                    {form.deadline === 'ingen' || form.deadline === ''
+                      ? 'Ingen deadline'
+                      : form.deadline}
+                  </span>
                 </div>
                 <div className="create__review-row">
                   <span className="create__review-label">Plats</span>
@@ -313,7 +396,7 @@ function CreateRequest() {
                 disabled={
                   (step === 0 && (!form.categoryId || !form.subcategory)) ||
                   (step === 1 && (!form.title || !form.description)) ||
-                  (step === 2 && (!form.location || !form.budget))
+                  (step === 2 && (!form.location || (form.budgetType === 'fast' && !form.budget)))
                 }
               >
                 Nästa →
