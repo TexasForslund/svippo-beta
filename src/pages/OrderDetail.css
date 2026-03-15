@@ -1,0 +1,380 @@
+.orderdetail {
+  padding: 48px 0 80px;
+  min-height: calc(100vh - 68px);
+  background: var(--color-bg);
+}
+
+.orderdetail-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: calc(100vh - 68px);
+  color: var(--color-gray);
+}
+
+.orderdetail__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Tillbaka */
+.orderdetail__back {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-main);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.2s;
+  padding: 0;
+}
+
+.orderdetail__back:hover {
+  opacity: 0.7;
+}
+
+/* Layout */
+.orderdetail__layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
+}
+
+.orderdetail__main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Header */
+.orderdetail__header {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.orderdetail__header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.orderdetail__label {
+  font-size: 13px;
+  color: var(--color-gray);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.orderdetail__title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.orderdetail__date {
+  font-size: 13px;
+  color: var(--color-gray);
+  margin-top: 4px;
+  display: block;
+}
+
+.orderdetail__status {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.orderdetail__status--pending {
+  background: #fff8e1;
+  color: #b45309;
+}
+
+.orderdetail__status--accepted {
+  background: #e6f9f0;
+  color: #1a7a4a;
+}
+
+.orderdetail__status--rejected {
+  background: #fdecea;
+  color: var(--color-orange);
+}
+
+.orderdetail__service-link {
+  font-size: 14px;
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.orderdetail__service-link:hover {
+  opacity: 0.7;
+}
+
+/* Formulär */
+.orderdetail__form {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.orderdetail__section-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.orderdetail__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.orderdetail__field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.orderdetail__field-value {
+  font-size: 15px;
+  color: var(--color-dark);
+}
+
+.orderdetail__field-value--message {
+  padding: 16px;
+  background: var(--color-gray-light);
+  border-radius: var(--radius-md);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* Sidebar */
+.orderdetail__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 88px;
+}
+
+/* Kund */
+.orderdetail__customer {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.orderdetail__customer-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: white;
+  font-size: 26px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orderdetail__customer-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.orderdetail__customer-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.orderdetail__detail-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--color-dark);
+  justify-content: center;
+}
+
+.orderdetail__detail-row a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.orderdetail__detail-row a:hover {
+  text-decoration: underline;
+}
+
+.orderdetail__contact-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.orderdetail__contact-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Åtgärder */
+.orderdetail__actions {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.orderdetail__current-status {
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.orderdetail__action-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.orderdetail__action-btns .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.orderdetail__reject-btn {
+  width: 100%;
+  justify-content: center;
+  color: var(--color-orange) !important;
+  border-color: var(--color-orange) !important;
+}
+
+.orderdetail__reject-btn:hover {
+  background: var(--color-orange) !important;
+  color: white !important;
+}
+
+/* Projektstatus */
+.orderdetail__progress {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.orderdetail__progress-hint {
+  font-size: 13px;
+  color: var(--color-gray);
+  line-height: 1.5;
+}
+
+.orderdetail__progress-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.orderdetail__progress-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-border);
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  font-family: var(--font-main);
+  width: 100%;
+}
+
+.orderdetail__progress-step:hover {
+  border-color: var(--color-primary);
+  background: #f0f8ff;
+}
+
+.orderdetail__progress-step--active {
+  border-color: var(--color-primary);
+  background: #e0f0fa;
+}
+
+.orderdetail__progress-step--done {
+  border-color: #1a7a4a;
+  background: #e6f9f0;
+}
+
+.orderdetail__progress-step--completed {
+  border-color: #1a7a4a;
+  background: #e6f9f0;
+}
+
+.orderdetail__progress-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-border);
+  color: var(--color-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.orderdetail__progress-step--active .orderdetail__progress-dot {
+  background: var(--color-primary);
+  color: white;
+}
+
+.orderdetail__progress-step--done .orderdetail__progress-dot,
+.orderdetail__progress-step--completed .orderdetail__progress-dot {
+  background: #1a7a4a;
+  color: white;
+}
+
+.orderdetail__progress-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.orderdetail__progress-info strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.orderdetail__progress-info span {
+  font-size: 12px;
+  color: var(--color-gray);
+}

@@ -322,7 +322,7 @@ function Profile() {
                   ) : (
                     <div className="profile__block-list">
                       {incomingOrders.slice(0, 3).map(order => (
-                        <div key={order.id} className="profile__block-item">
+                        <Link to={`/bestallning/${order.id}`} key={order.id} className="profile__block-item">
                           <div className="profile__block-item-info">
                             <strong>{order.buyerName}</strong>
                             <span>{order.serviceTitle}</span>
@@ -330,7 +330,7 @@ function Profile() {
                           <span className={`profile__item-tag profile__item-tag--${order.status}`}>
                             {order.status === 'pending' ? '⏳ Väntar' : order.status === 'accepted' ? '✅ Godkänd' : '❌ Nekad'}
                           </span>
-                        </div>
+                        </Link>
                       ))}
                     </div>
                   )}
@@ -496,7 +496,7 @@ function Profile() {
             ) : (
               <div className="profile__list">
                 {incomingOrders.map(order => (
-                  <div key={order.id} className="profile__item card">
+                  <Link to={`/bestallning/${order.id}`} key={order.id} className="profile__item card">
                     <div className="profile__item-icon">📥</div>
                     <div className="profile__item-info">
                       <strong>{order.serviceTitle}</strong>
@@ -506,7 +506,7 @@ function Profile() {
                     <span className={`profile__item-tag profile__item-tag--${order.status}`}>
                       {order.status === 'pending' ? '⏳ Väntar' : order.status === 'accepted' ? '✅ Godkänd' : '❌ Nekad'}
                     </span>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}

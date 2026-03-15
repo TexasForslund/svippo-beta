@@ -14,6 +14,7 @@ import CreateRequest from './pages/CreateRequest'
 import RequestDetail from './pages/RequestDetail'
 import Interests from './pages/Interests'
 import PublicProfile from './pages/PublicProfile'
+import OrderDetail from './pages/OrderDetail'
 
 
 
@@ -36,6 +37,7 @@ function App() {
         <Route path="/forfragning/:id" element={<RequestDetail />} />
         <Route path="/intresseanmalningar" element={<Interests />} />
         <Route path="/svippare/:id" element={<PublicProfile />} />
+        <Route path="/bestallning/:id" element={<OrderDetail />} />
       </Routes>
       <Footer />
     </BrowserRouter>
