@@ -205,3 +205,27 @@
   color: var(--color-gray);
   line-height: 1.5;
 }
+
+.detail__seller-link {
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.detail__seller-link:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.detail__seller-profile-btn {
+  font-size: 13px;
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 4px;
+  display: inline-block;
+  transition: opacity 0.2s;
+}
+
+.detail__seller-profile-btn:hover {
+  opacity: 0.7;
+}

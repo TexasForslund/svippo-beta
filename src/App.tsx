@@ -13,6 +13,7 @@ import Requests from './pages/Requests'
 import CreateRequest from './pages/CreateRequest'
 import RequestDetail from './pages/RequestDetail'
 import Interests from './pages/Interests'
+import PublicProfile from './pages/PublicProfile'
 
 
 
@@ -34,6 +35,7 @@ function App() {
         <Route path="/skapa-forfragning" element={<CreateRequest />} />
         <Route path="/forfragning/:id" element={<RequestDetail />} />
         <Route path="/intresseanmalningar" element={<Interests />} />
+        <Route path="/svippare/:id" element={<PublicProfile />} />
       </Routes>
       <Footer />
     </BrowserRouter>

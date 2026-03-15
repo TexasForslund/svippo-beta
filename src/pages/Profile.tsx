@@ -90,6 +90,7 @@ function Profile() {
   const [saving, setSaving] = useState(false)
   const [success, setSuccess] = useState(false)
   const [editing, setEditing] = useState(false)
+  const [bio, setBio] = useState('')
 
   // Data
   const [services, setServices] = useState<Service[]>([])
@@ -108,6 +109,7 @@ function Profile() {
         const data = profileSnap.data()
         setDisplayName(data.name || user.displayName || '')
         setPhone(data.phone || '')
+        setBio(data.bio || '')
       }
 
       // Mina tjänster
@@ -149,6 +151,7 @@ function Profile() {
         name: displayName,
         email: user.email,
         phone,
+        bio,
       }, { merge: true })
       setSuccess(true)
       setEditing(false)
@@ -178,6 +181,12 @@ function Profile() {
           <div>
             <strong className="profile__sidebar-name">{displayName || 'Inget namn'}</strong>
             <p className="profile__sidebar-email">{user.email}</p>
+            <Link
+              to={`/svippare/${user.uid}`}
+              className="profile__sidebar-publink"
+            >
+              👁️ Se publik profil →
+            </Link>
           </div>
         </div>
 
@@ -665,6 +674,19 @@ function Profile() {
                     placeholder="070-000 00 00"
                     type="tel"
                   />
+                </div>
+
+                <div className="profile__field">
+                  <label className="profile__label">Om mig</label>
+                  <textarea
+                    className={`profile__input profile__textarea ${!editing ? 'profile__input--disabled' : ''}`}
+                    value={bio}
+                    onChange={e => setBio(e.target.value)}
+                    disabled={!editing}
+                    placeholder="Beskriv dig själv, din erfarenhet och vad du kan hjälpa med..."
+                    rows={4}
+                  />
+                  <span className="profile__hint">Visas på din publika profilsida</span>
                 </div>
               </div>
 

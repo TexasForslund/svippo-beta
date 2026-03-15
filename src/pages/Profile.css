@@ -711,3 +711,29 @@
   box-shadow: var(--shadow-md);
   border-color: var(--color-primary);
 }
+
+.profile__textarea {
+  resize: vertical;
+  line-height: 1.6;
+  font-family: var(--font-main);
+}
+
+.profile__sidebar-publink {
+  font-size: 12px;
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 4px;
+  display: inline-block;
+  transition: opacity 0.2s;
+}
+
+.profile__sidebar-publink:hover {
+  opacity: 0.7;
+}
+
+.profile__view-btn {
+  font-size: 12px;
+  color: var(--color-primary);
+  font-weight: 600;
+}

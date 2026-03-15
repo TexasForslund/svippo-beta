@@ -97,10 +97,18 @@ function ServiceDetail() {
                   {service.userName?.charAt(0).toUpperCase() || '?'}
                 </div>
                 <div className="detail__seller-info">
-                  <strong className="detail__seller-name">{service.userName}</strong>
+                  <Link to={`/svippare/${service.userId}`} className="detail__seller-name detail__seller-link">
+                    {service.userName}
+                  </Link>
                   <span className="detail__seller-rating">
                     ⭐ {service.rating || '–'} ({service.reviews} recensioner)
                   </span>
+                  <Link
+                    to={`/svippare/${service.userId}`}
+                    className="detail__seller-profile-btn"
+                  >
+                    👤 Se profil →
+                  </Link>
                 </div>
               </div>
 
