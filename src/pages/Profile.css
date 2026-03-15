@@ -737,3 +737,45 @@
   color: var(--color-primary);
   font-weight: 600;
 }
+
+
+/* Notiser */
+.profile__notifications {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile__notification {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.profile__notification--project_completed {
+  background: #e6f9f0;
+  border-color: #1a7a4a;
+}
+
+.profile__notification--request_review {
+  background: #fff8e1;
+  border-color: #b45309;
+}
+
+.profile__notification-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.profile__notification-content {
+  flex: 1;
+}
+
+.profile__notification-content p {
+  font-size: 14px;
+  color: var(--color-dark);
+  line-height: 1.5;
+}

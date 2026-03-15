@@ -65,6 +65,16 @@ type Interest = {
   createdAt: Timestamp
 }
 
+type Notification = {
+  id: string
+  type: string
+  orderId: string
+  serviceTitle: string
+  message: string
+  read: boolean
+  createdAt: Timestamp
+}
+
 const NAV_ITEMS = [
   { id: 'oversikt', label: 'Översikt', icon: '🏠', group: null },
 
@@ -98,6 +108,7 @@ function Profile() {
   const [placedOrders, setPlacedOrders] = useState<PlacedOrder[]>([])
   const [myRequests, setMyRequests] = useState<Request[]>([])
   const [interests, setInterests] = useState<Interest[]>([])
+  const [notifications, setNotifications] = useState<Notification[]>([])
 
   useEffect(() => {
     if (!user) return
@@ -131,6 +142,16 @@ function Profile() {
       // Intresseanmälningar
       const interestsSnap = await getDocs(query(collection(db, 'interests'), where('requestOwnerId', '==', user.uid)))
       setInterests(interestsSnap.docs.map(d => ({ id: d.id, ...d.data() })) as Interest[])
+
+      // Notiser
+      const notificationsSnap = await getDocs(
+        query(
+          collection(db, 'notifications'),
+          where('userId', '==', user.uid),
+          where('read', '==', false)
+        )
+      )
+      setNotifications(notificationsSnap.docs.map(d => ({ id: d.id, ...d.data() })) as Notification[])
     }
 
     fetchAll()
@@ -231,6 +252,38 @@ function Profile() {
         {activeSection === 'oversikt' && (
           <div className="profile__section">
             <h1 className="profile__section-title">Välkommen tillbaka, {displayName || 'där'}! 👋</h1>
+
+            {notifications.length > 0 && (
+              <div className="profile__notifications">
+                {notifications.map(notif => (
+                  <div key={notif.id} className={`profile__notification profile__notification--${notif.type}`}>
+                    <span className="profile__notification-icon">
+                      {notif.type === 'project_completed' ? '🎉' : '💰'}
+                    </span>
+                    <div className="profile__notification-content">
+                      <p>{notif.message}</p>
+                    </div>
+                    {notif.type === 'project_completed' && (
+                      <Link
+                        to={`/bestallning/${notif.orderId}`}
+                        className="btn btn-primary"
+                      >
+                        Lämna recension
+                      </Link>
+                    )}
+                    {notif.type === 'request_review' && (
+                      <Link
+                        to={`/bestallning/${notif.orderId}`}
+                        className="btn btn-orange"
+                      >
+                        Ta betalt
+                      </Link>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
 
             {/* Statistik-kort */}
             <div className="profile__stats">
