@@ -7,6 +7,7 @@ import { auth } from '../firebase'
 import { db } from '../firebase'
 import useAuth from '../hooks/useAuth'
 import CreateModal from './CreateModal'
+import SearchBar from './SearchBar'
 import './Navbar.css'
 import logo from '../assets/logo.svg'
 
@@ -53,14 +54,7 @@ function Navbar() {
           <Link to="/forfragningar" className="navbar__link">Förfrågningar</Link>
         </div>
 
-        <div className="navbar__search">
-          <span className="navbar__search-icon">🔍</span>
-          <input
-            type="text"
-            placeholder="Vad vill du svippa?"
-            className="navbar__search-input"
-          />
-        </div>
+        <SearchBar />
 
         <div className="navbar__actions">
           {!loading && (

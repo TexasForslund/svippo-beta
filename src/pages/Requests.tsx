@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { collection, getDocs, orderBy, query } from 'firebase/firestore'
 import { db } from '../firebase'
 import { Link } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { categories } from '../data/categories'
 import type { Timestamp } from 'firebase/firestore'
 import './Requests.css'
@@ -75,6 +76,14 @@ function Requests() {
   }
 
   const hasFilters = search || selectedCategory || selectedLocation || sortBy !== 'newest'
+  const [searchParams] = useSearchParams()
+
+  useEffect(() => {
+    const searchFromUrl = searchParams.get('search')
+    if (searchFromUrl) {
+      setSearch(searchFromUrl)
+    }
+  }, [searchParams])
 
   return (
     <div className="requests">

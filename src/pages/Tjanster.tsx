@@ -3,6 +3,7 @@ import { collection, getDocs, orderBy, query } from 'firebase/firestore'
 import { db } from '../firebase'
 import { Link } from 'react-router-dom'
 import { categories } from '../data/categories'
+import { useSearchParams } from 'react-router-dom'
 import type { Timestamp } from 'firebase/firestore'
 import './Tjanster.css'
 
@@ -30,6 +31,14 @@ function Tjanster() {
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedLocation, setSelectedLocation] = useState('')
   const [sortBy, setSortBy] = useState('newest')
+  const [searchParams] = useSearchParams()
+
+  useEffect(() => {
+    const searchFromUrl = searchParams.get('search')
+    if (searchFromUrl) {
+      setSearch(searchFromUrl)
+    }
+  }, [searchParams])
 
   useEffect(() => {
     const fetchServices = async () => {
