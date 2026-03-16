@@ -25,9 +25,14 @@ type Request = {
 
 type SearchType = 'tjanster' | 'forfragningar'
 
-function SearchBar() {
+type Props = {
+  hideTypePicker?: boolean
+  defaultType?: SearchType
+}
+
+function SearchBar({ hideTypePicker = false, defaultType = 'tjanster' }: Props) {
   const navigate = useNavigate()
-  const [searchType, setSearchType] = useState<SearchType>('tjanster')
+  const [searchType, setSearchType] = useState<SearchType>(defaultType)
   const [search, setSearch] = useState('')
   const [showDropdown, setShowDropdown] = useState(false)
   const [showTypePicker, setShowTypePicker] = useState(false)
@@ -90,10 +95,10 @@ function SearchBar() {
   }, [search, searchType])
 
   const handleFocus = () => {
-    if (!search) {
+    if (!search && !hideTypePicker) {
       setShowTypePicker(true)
       setShowDropdown(false)
-    } else {
+    } else if (search) {
       setShowDropdown(true)
       setShowTypePicker(false)
     }
@@ -131,19 +136,22 @@ function SearchBar() {
       <div className={`searchbar__input-wrapper ${showDropdown || showTypePicker ? 'searchbar__input-wrapper--active' : ''}`}>
 
         {/* Typ-knapp */}
-        <button
-          className="searchbar__type-btn"
-          onClick={() => {
-            setShowTypePicker(!showTypePicker)
-            setShowDropdown(false)
-          }}
-          type="button"
-        >
-          {searchType === 'tjanster' ? '🛠️ Tjänster' : '🙋 Förfrågningar'}
-          <span className="searchbar__type-arrow">▾</span>
-        </button>
-
-        <div className="searchbar__divider" />
+        {!hideTypePicker && (
+          <>
+            <button
+              className="searchbar__type-btn"
+              onClick={() => {
+                setShowTypePicker(!showTypePicker)
+                setShowDropdown(false)
+              }}
+              type="button"
+            >
+              {searchType === 'tjanster' ? '🛠️ Tjänster' : '🙋 Förfrågningar'}
+              <span className="searchbar__type-arrow">▾</span>
+            </button>
+            <div className="searchbar__divider" />
+          </>
+        )}
 
         <span className="searchbar__icon">🔍</span>
         <input
@@ -171,7 +179,7 @@ function SearchBar() {
       </div>
 
       {/* Typ-väljare */}
-      {showTypePicker && (
+      {showTypePicker && !hideTypePicker && (
         <div className="searchbar__dropdown">
           <p className="searchbar__dropdown-hint">Vad letar du efter?</p>
           <button

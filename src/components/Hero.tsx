@@ -1,3 +1,4 @@
+import SearchBar from './SearchBar'
 import './Hero.css'
 
 function Hero() {
@@ -16,13 +17,8 @@ function Hero() {
         </h1>
 
         {/* Sökruta */}
-        <div className="hero__search">
-          <span className="hero__search-icon">🔍</span>
-          <input
-            type="text"
-            placeholder="Vad vill du svippa?"
-            className="hero__search-input"
-          />
+        <div className="hero__searchbar">
+          <SearchBar hideTypePicker defaultType="tjanster" />
         </div>
 
         {/* Populära sökningar */}
