@@ -164,13 +164,17 @@ function ServiceDetail() {
       </div>
       {showOrder && (
         <OrderModal
-            serviceId={service.id}
-            serviceTitle={service.title}
-            sellerId={service.userId}
-            sellerName={service.userName}
-            onClose={() => setShowOrder(false)}
+          serviceId={service.id}
+          serviceTitle={service.title}
+          sellerId={service.userId}
+          sellerName={service.userName}
+          subcategory={service.subcategory}
+          priceType={service.priceType}
+          price={service.price}
+          location={service.location}
+          onClose={() => setShowOrder(false)}
         />
-        )}
+      )}
     </div>
   )
 }

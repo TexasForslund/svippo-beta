@@ -149,3 +149,126 @@
   color: var(--color-gray);
   cursor: not-allowed;
 }
+
+/* Steg-för-steg */
+.order-modal--large {
+  max-width: 560px;
+}
+
+.order-modal__steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 8px;
+}
+
+.order-modal__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  position: relative;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-gray);
+}
+
+.order-modal__step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--color-border);
+  z-index: 0;
+}
+
+.order-modal__step--done:not(:last-child)::after {
+  background: var(--color-primary);
+}
+
+.order-modal__step-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-border);
+  color: var(--color-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+}
+
+.order-modal__step--active .order-modal__step-dot {
+  background: var(--color-primary);
+  color: white;
+}
+
+.order-modal__step--done .order-modal__step-dot {
+  background: var(--color-primary);
+  color: white;
+}
+
+.order-modal__step--active {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.order-modal__step-hint {
+  font-size: 13px;
+  color: var(--color-gray);
+  margin-bottom: 4px;
+}
+
+/* Select */
+.order-modal__select {
+  cursor: pointer;
+  font-family: var(--font-main);
+}
+
+/* Required */
+.order-modal__required {
+  color: var(--color-orange);
+}
+
+/* Tjänstesammanfattning */
+.order-modal__service-summary {
+  background: var(--color-gray-light);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid var(--color-border);
+}
+
+.order-modal__summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.order-modal__summary-row span {
+  color: var(--color-gray);
+}
+
+.order-modal__summary-row strong {
+  color: var(--color-dark);
+}
+
+/* Navigering */
+.order-modal__nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
