@@ -56,9 +56,13 @@ function ReviewModal({ orderId, serviceId, serviceTitle, revieweeId, revieweeNam
             )
         )
         const allRatings = reviewsSnap.docs.map(d => d.data().rating as number)
-        allRatings.push(rating) // lägg till den nya
         const avg = allRatings.reduce((sum, r) => sum + r, 0) / allRatings.length
         const rounded = Math.round(avg * 10) / 10
+
+        await updateDoc(doc(db, 'services', serviceId), {
+          rating: rounded,
+          reviews: allRatings.length,
+        })
 
         await updateDoc(doc(db, 'services', serviceId), {
             rating: rounded,
