@@ -5,6 +5,8 @@ import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 import type { Timestamp } from 'firebase/firestore'
 import ReviewsList from '../components/ReviewsList'
+import useAuth from '../hooks/useAuth'
+import LoginPromptModal from '../components/LoginPromptModal'
 import './ServiceDetail.css'
 
 type Service = {
@@ -36,6 +38,8 @@ function ServiceDetail() {
   const [service, setService] = useState<Service | null>(null)
   const [loading, setLoading] = useState(true)
   const [showOrder, setShowOrder] = useState(false)
+  const { user } = useAuth()
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false)
 
   useEffect(() => {
     const fetchService = async () => {
@@ -143,18 +147,31 @@ function ServiceDetail() {
                 </div>
               </div>
 
-             <button
-                className="btn btn-primary detail__order-btn"
-                onClick={() => setShowOrder(true)}
+              {user?.uid === service.userId ? (
+                <div className="detail__own-service">
+                  <span>✏️</span>
+                  <div>
+                    <strong>Detta är din tjänst</strong>
+                    <p>Du kan inte beställa din egen tjänst.</p>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  className="btn btn-primary detail__order-btn"
+                  onClick={() => user ? setShowOrder(true) : setShowLoginPrompt(true)}
                 >
-                Beställ
+                  Beställ
                 </button>
-              <a
-                href={`mailto:${service.userEmail}`}
-                className="btn btn-outline detail__question-btn"
-              >
-                💬 Har du en fråga?
-              </a>
+              )}
+
+              {user?.uid !== service.userId && (
+                <a
+                  href={`mailto:${service.userEmail}`}
+                  className="btn btn-outline detail__question-btn"
+                >
+                  💬 Har du en fråga?
+                </a>
+              )}
             </div>
 
             {/* Trygg handel */}
@@ -181,6 +198,13 @@ function ServiceDetail() {
           location={service.location}
           customQuestions={service.customQuestions || []}
           onClose={() => setShowOrder(false)}
+        />
+      )}
+
+      {showLoginPrompt && (
+        <LoginPromptModal
+          message="Du måste logga in för att beställa en tjänst."
+          onClose={() => setShowLoginPrompt(false)}
         />
       )}
     </div>

@@ -229,3 +229,32 @@
 .detail__seller-profile-btn:hover {
   opacity: 0.7;
 }
+
+.detail__own-service {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #f0f8ff;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-primary);
+  font-size: 14px;
+}
+
+.detail__own-service span {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.detail__own-service strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-dark);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.detail__own-service p {
+  font-size: 13px;
+  color: var(--color-gray);
+}
