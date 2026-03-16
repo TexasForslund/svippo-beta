@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { doc, getDoc, updateDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase'
 import useAuth from '../hooks/useAuth'
+import { orderQuestions } from '../data/orderQuestions'
 import type { Timestamp } from 'firebase/firestore'
 import ReviewModal from '../components/ReviewModal'
 import './OrderDetail.css'
@@ -20,9 +21,12 @@ type Order = {
   buyerEmail: string
   buyerPhone: string
   message: string
+  answers?: { [key: string]: string }
+  customAnswers?: { [key: string]: string }
   status: 'pending' | 'accepted' | 'rejected'
   projectStatus?: ProjectStatus
   paymentStatus?: 'unpaid' | 'paid'
+  subcategory?: string
   createdAt: Timestamp
 }
 
@@ -193,12 +197,49 @@ function OrderDetail() {
             {/* Beställarens formulär */}
             <div className="orderdetail__form card">
               <h2 className="orderdetail__section-title">📋 Ifyllt formulär</h2>
+
+              {/* Meddelande */}
               <div className="orderdetail__field">
                 <span className="orderdetail__field-label">Meddelande</span>
                 <div className="orderdetail__field-value orderdetail__field-value--message">
                   {order.message}
                 </div>
               </div>
+
+              {/* Underkategori-svar */}
+              {order.answers && Object.keys(order.answers).length > 0 && (
+                <div className="orderdetail__field">
+                  <span className="orderdetail__field-label">Svar på frågor</span>
+                  <div className="orderdetail__answers">
+                    {Object.entries(order.answers).map(([key, value]) => {
+                      const questions = orderQuestions[order.subcategory || ''] || []
+                      const question = questions.find(q => q.id === key)
+                      return (
+                        <div key={key} className="orderdetail__answer-row">
+                          <span className="orderdetail__answer-key">{question?.label || key}</span>
+                          <span className="orderdetail__answer-value">{value}</span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Utförarens egna frågor */}
+              {order.customAnswers && Object.keys(order.customAnswers).length > 0 && (
+                <div className="orderdetail__field">
+                  <span className="orderdetail__field-label">Svar på dina frågor</span>
+                  <div className="orderdetail__answers">
+                    {Object.entries(order.customAnswers).map(([key, value]) => (
+                      <div key={key} className="orderdetail__answer-row">
+                        <span className="orderdetail__answer-key">{key}</span>
+                        <span className="orderdetail__answer-value">{value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
             </div>
 
           </div>

@@ -436,3 +436,39 @@
   flex-direction: column;
   gap: 16px;
 }
+
+.orderdetail__answers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--color-gray-light);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.orderdetail__answer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  font-size: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.orderdetail__answer-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.orderdetail__answer-key {
+  color: var(--color-gray);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.orderdetail__answer-value {
+  color: var(--color-dark);
+  font-weight: 600;
+  text-align: right;
+}

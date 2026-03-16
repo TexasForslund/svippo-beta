@@ -90,6 +90,13 @@ const totalSteps = STEPS.length
     if (!user) return
     setSaving(true)
     try {
+      const customAnswersWithLabels: { [key: string]: string } = {}
+      customQuestions.forEach(q => {
+        if (customAnswers[q.id]) {
+          customAnswersWithLabels[q.label] = customAnswers[q.id]
+        }
+      })
+
       await addDoc(collection(db, 'orders'), {
         serviceId,
         serviceTitle,
@@ -99,9 +106,10 @@ const totalSteps = STEPS.length
         buyerName: name,
         buyerEmail: email,
         buyerPhone: phone,
+        subcategory,
         message,
         answers,
-        customAnswers,
+        customAnswers: customAnswersWithLabels,
         status: 'pending',
         createdAt: serverTimestamp(),
       })

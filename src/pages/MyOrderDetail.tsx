@@ -4,6 +4,7 @@ import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firesto
 import { db } from '../firebase'
 import useAuth from '../hooks/useAuth'
 import type { Timestamp } from 'firebase/firestore'
+import { orderQuestions } from '../data/orderQuestions'
 import ReviewModal from '../components/ReviewModal'
 import './MyOrderDetail.css'
 
@@ -21,6 +22,9 @@ type Order = {
   message: string
   status: 'pending' | 'accepted' | 'rejected'
   projectStatus?: ProjectStatus
+  subcategory?: string
+  answers?: { [key: string]: string }
+  customAnswers?: { [key: string]: string }
   createdAt: Timestamp
   buyerReviewed?: boolean
 }
@@ -144,6 +148,40 @@ function MyOrderDetail() {
                 {order.message}
               </div>
             </div>
+
+            {/* Svar på underkategori-frågor */}
+            {order.answers && Object.keys(order.answers).length > 0 && (
+              <div className="myorder__message card">
+                <h2 className="orderdetail__section-title">📝 Dina svar</h2>
+                <div className="orderdetail__answers">
+                  {Object.entries(order.answers).map(([key, value]) => {
+                    const questions = orderQuestions[order.subcategory || ''] || []
+                    const question = questions.find(q => q.id === key)
+                    return (
+                      <div key={key} className="orderdetail__answer-row">
+                        <span className="orderdetail__answer-key">{question?.label || key}</span>
+                        <span className="orderdetail__answer-value">{value}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Svar på utförarens egna frågor */}
+            {order.customAnswers && Object.keys(order.customAnswers).length > 0 && (
+              <div className="myorder__message card">
+                <h2 className="orderdetail__section-title">💬 Svar på utförarens frågor</h2>
+                <div className="orderdetail__answers">
+                  {Object.entries(order.customAnswers).map(([key, value]) => (
+                    <div key={key} className="orderdetail__answer-row">
+                      <span className="orderdetail__answer-key">{key}</span>
+                      <span className="orderdetail__answer-value">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Projektstatus – skrivskyddad vy för köparen */}
             {order.status === 'accepted' && (
