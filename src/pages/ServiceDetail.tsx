@@ -99,7 +99,7 @@ function ServiceDetail() {
 
             <div className="detail__section">
               <h2 className="detail__section-title">Recensioner</h2>
-              <ReviewsList userId={service.userId} />
+              <ReviewsList userId={service.userId} serviceId={service.id} />
             </div>
 
           </div>

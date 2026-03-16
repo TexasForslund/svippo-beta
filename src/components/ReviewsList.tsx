@@ -10,11 +10,13 @@ type Review = {
   rating: number
   comment: string
   serviceTitle: string
+  serviceId?: string
   createdAt: Timestamp
 }
 
 type Props = {
   userId: string
+  serviceId?: string
 }
 
 function StarDisplay({ rating }: { rating: number }) {
@@ -32,7 +34,7 @@ function StarDisplay({ rating }: { rating: number }) {
   )
 }
 
-function ReviewsList({ userId }: Props) {
+function ReviewsList({ userId, serviceId }: Props) {
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
   const [avgRating, setAvgRating] = useState(0)
@@ -46,10 +48,14 @@ function ReviewsList({ userId }: Props) {
           where('role', '==', 'buyer')
         )
         const snapshot = await getDocs(q)
-        const data = snapshot.docs.map(d => ({
+        let data = snapshot.docs.map(d => ({
           id: d.id,
           ...d.data()
         })) as Review[]
+        
+        if (serviceId) {
+          data = data.filter(r => r.serviceId === serviceId)
+        }
 
         data.sort((a, b) =>
           b.createdAt?.toDate().getTime() - a.createdAt?.toDate().getTime()
@@ -68,7 +74,7 @@ function ReviewsList({ userId }: Props) {
       }
     }
     fetchReviews()
-  }, [userId])
+  }, [userId, serviceId])
 
   if (loading) return <div className="reviews__loading">Laddar recensioner...</div>
 
