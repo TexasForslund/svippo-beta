@@ -9,6 +9,15 @@ import './CreateService.css'
 
 type PriceType = 'timpris' | 'fastpris' | 'offert'
 
+type CustomQuestion = {
+  id: string
+  label: string
+  type: 'text' | 'select' | 'textarea'
+  options?: string[]
+  required: boolean
+}
+
+
 type FormData = {
   title: string
   description: string
@@ -18,9 +27,10 @@ type FormData = {
   price: string
   location: string
   contactEmail: string
+  customQuestions: CustomQuestion[]
 }
 
-const STEPS = ['Kategori', 'Detaljer', 'Pris & plats', 'Granska']
+const STEPS = ['Kategori', 'Detaljer', 'Pris & plats', 'Egna frågor', 'Granska']
 
 function CreateService() {
   const { user, loading } = useAuth()
@@ -28,18 +38,25 @@ function CreateService() {
   const [step, setStep] = useState(0)
   const [saving, setSaving] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
+  const [newQuestion, setNewQuestion] = useState({
+    label: '',
+    type: 'text' as 'text' | 'select' | 'textarea',
+    options: '',
+    required: false,
+  })
   
 
-  const [form, setForm] = useState<FormData>({
-    title: '',
-    description: '',
-    categoryId: '',
-    subcategory: '',
-    priceType: 'timpris',
-    price: '',
-    location: '',
-    contactEmail: user?.email || '',
-  })
+const [form, setForm] = useState<FormData>({
+  title: '',
+  description: '',
+  categoryId: '',
+  subcategory: '',
+  priceType: 'timpris',
+  price: '',
+  location: '',
+  contactEmail: user?.email || '',
+  customQuestions: [],
+})
 
   if (loading) return <div className="create-loading">Laddar...</div>
   if (!user) {
@@ -53,25 +70,34 @@ function CreateService() {
     setForm(prev => ({ ...prev, [field]: value }))
   }
 
-    const handleSubmit = async () => {
+  const handleSubmit = async () => {
     setSaving(true)
     try {
-        await addDoc(collection(db, 'services'), {
+      const cleanedQuestions = form.customQuestions.map(q => ({
+        id: q.id,
+        label: q.label,
+        type: q.type,
+        required: q.required,
+        ...(q.options ? { options: q.options } : {}),
+      }))
+
+      await addDoc(collection(db, 'services'), {
         ...form,
+        customQuestions: cleanedQuestions,
         userId: user.uid,
         userName: user.displayName || user.email,
         userEmail: user.email,
         rating: 0,
         reviews: 0,
         createdAt: serverTimestamp(),
-        })
-        setShowSuccess(true)
+      })
+      setShowSuccess(true)
     } catch (err) {
-        console.error(err)
+      console.error(err)
     } finally {
-        setSaving(false)
+      setSaving(false)
     }
-    }
+  }
 
   return (
     <div className="create">
@@ -180,7 +206,7 @@ function CreateService() {
                         onClick={() => update('priceType', pt)}
                         type="button"
                       >
-                        {pt === 'timpris' ? '⏱️ Timpris' : pt === 'fastpris' ? '💰 Fast pris' : '📋 Offert'}
+                        {pt === 'timpris' ? '⏱️ Timpris' : pt === 'fastpris' ? '💰 Fast pris' : '📋 Ge prisförslag'}
                       </button>
                     ))}
                   </div>
@@ -225,8 +251,133 @@ function CreateService() {
             </div>
           )}
 
-          {/* Steg 4 – Granska */}
+          {/* Steg 4 – Egna frågor */}
           {step === 3 && (
+            <div className="create__content">
+              <h1 className="create__title">Egna frågor</h1>
+              <p className="create__subtitle">
+                Lägg till frågor du vill ställa till dina beställare. Max 5 frågor.
+              </p>
+
+              {/* Befintliga frågor */}
+              {form.customQuestions.length > 0 && (
+                <div className="create__custom-questions">
+                  {form.customQuestions.map((q, index) => (
+                    <div key={q.id} className="create__custom-question">
+                      <div className="create__custom-question-info">
+                        <strong>{q.label}</strong>
+                        <span>{q.type === 'text' ? 'Fritext' : q.type === 'textarea' ? 'Långt svar' : `Val: ${q.options?.join(', ')}`}</span>
+                        {q.required && <span className="create__custom-question-required">Obligatorisk</span>}
+                      </div>
+                      <button
+                        type="button"
+                        className="create__custom-question-remove"
+                        onClick={() => {
+                          setForm(prev => ({
+                            ...prev,
+                            customQuestions: prev.customQuestions.filter((_, i) => i !== index)
+                          }))
+                        }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Lägg till ny fråga */}
+              {form.customQuestions.length < 5 && (
+                <div className="create__add-question card">
+                  <h3 className="create__add-question-title">+ Lägg till fråga</h3>
+
+                  <div className="create__fields">
+                    <div className="create__field">
+                      <label className="create__label">Fråga</label>
+                      <input
+                        className="create__input"
+                        placeholder="T.ex. Har du egna verktyg?"
+                        value={newQuestion.label}
+                        onChange={e => setNewQuestion(prev => ({ ...prev, label: e.target.value }))}
+                      />
+                    </div>
+
+                    <div className="create__field">
+                      <label className="create__label">Svarstyp</label>
+                      <div className="create__price-types">
+                        {(['text', 'textarea', 'select'] as const).map(type => (
+                          <button
+                            key={type}
+                            type="button"
+                            className={`create__price-type-btn ${newQuestion.type === type ? 'create__price-type-btn--active' : ''}`}
+                            onClick={() => setNewQuestion(prev => ({ ...prev, type }))}
+                          >
+                            {type === 'text' ? '✏️ Kort svar' : type === 'textarea' ? '📝 Långt svar' : '📋 Flerval'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {newQuestion.type === 'select' && (
+                      <div className="create__field">
+                        <label className="create__label">Svarsalternativ</label>
+                        <input
+                          className="create__input"
+                          placeholder="Separera med komma, t.ex. Ja,Nej,Vet ej"
+                          value={newQuestion.options}
+                          onChange={e => setNewQuestion(prev => ({ ...prev, options: e.target.value }))}
+                        />
+                      </div>
+                    )}
+
+                    <div className="create__field">
+                      <label className="create__checkbox-label">
+                        <input
+                          type="checkbox"
+                          checked={newQuestion.required}
+                          onChange={e => setNewQuestion(prev => ({ ...prev, required: e.target.checked }))}
+                        />
+                        Obligatorisk fråga
+                      </label>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      disabled={!newQuestion.label || (newQuestion.type === 'select' && !newQuestion.options)}
+                      onClick={() => {
+                        const question: CustomQuestion = {
+                          id: Date.now().toString(),
+                          label: newQuestion.label,
+                          type: newQuestion.type,
+                          options: newQuestion.type === 'select'
+                            ? newQuestion.options.split(',').map(o => o.trim()).filter(Boolean)
+                            : undefined,
+                          required: newQuestion.required,
+                        }
+                        setForm(prev => ({
+                          ...prev,
+                          customQuestions: [...prev.customQuestions, question]
+                        }))
+                        setNewQuestion({ label: '', type: 'text', options: '', required: false })
+                      }}
+                    >
+                      Lägg till fråga
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {form.customQuestions.length === 0 && (
+                <p className="create__skip-hint">
+                  💡 Du kan hoppa över detta steg om du inte vill lägga till egna frågor.
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Steg 5 – Granska */}
+          {step === 4 && (
             <div className="create__content">
               <h1 className="create__title">Granska & publicera</h1>
               <p className="create__subtitle">Kontrollera att allt stämmer innan du publicerar.</p>
@@ -260,6 +411,11 @@ function CreateService() {
                   <span className="create__review-label">Kontakt</span>
                   <span>{form.contactEmail}</span>
                 </div>
+                <div className="create__review-row">
+                  <span className="create__review-label">Egna frågor</span>
+                  <span>{form.customQuestions.length > 0 ? `${form.customQuestions.length} frågor` : 'Inga'}</span>
+                </div>
+
               </div>
             </div>
           )}

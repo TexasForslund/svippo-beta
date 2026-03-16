@@ -22,6 +22,13 @@ type Service = {
   rating: number
   reviews: number
   createdAt: Timestamp
+  customQuestions?: {
+    id: string
+    label: string
+    type: 'text' | 'select' | 'textarea'
+    options?: string[]
+    required: boolean
+  }[]
 }
 
 function ServiceDetail() {
@@ -172,6 +179,7 @@ function ServiceDetail() {
           priceType={service.priceType}
           price={service.price}
           location={service.location}
+          customQuestions={service.customQuestions || []}
           onClose={() => setShowOrder(false)}
         />
       )}

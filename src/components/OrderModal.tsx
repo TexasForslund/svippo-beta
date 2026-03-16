@@ -5,6 +5,14 @@ import useAuth from '../hooks/useAuth'
 import { orderQuestions } from '../data/orderQuestions'
 import './OrderModal.css'
 
+type CustomQuestion = {
+  id: string
+  label: string
+  type: 'text' | 'select' | 'textarea'
+  options?: string[]
+  required: boolean
+}
+
 type Props = {
   serviceId: string
   serviceTitle: string
@@ -14,6 +22,7 @@ type Props = {
   priceType: string
   price: string
   location: string
+  customQuestions: CustomQuestion[]
   onClose: () => void
 }
 
@@ -26,6 +35,7 @@ function OrderModal({
   priceType,
   price,
   location,
+  customQuestions,
   onClose,
 }: Props) {
   const { user } = useAuth()
@@ -40,6 +50,7 @@ function OrderModal({
 
   // Anpassade svar
   const [answers, setAnswers] = useState<{ [key: string]: string }>({})
+  const [customAnswers, setCustomAnswers] = useState<{ [key: string]: string }>({})
 
   // Meddelande
   const [message, setMessage] = useState('')
@@ -63,11 +74,17 @@ function OrderModal({
     fetchProfile()
   }, [user])
 
-  const questions = orderQuestions[subcategory] || []
-  const totalSteps = questions.length > 0 ? 3 : 2
-  const STEPS = questions.length > 0
-    ? ['Kontaktinfo', 'Frågor', 'Bekräfta']
-    : ['Kontaktinfo', 'Bekräfta']
+const subcategoryQuestions = orderQuestions[subcategory] || []
+const hasSubcategoryQuestions = subcategoryQuestions.length > 0
+const hasCustomQuestions = customQuestions.length > 0
+
+const STEPS = [
+  'Kontaktinfo',
+  ...(hasSubcategoryQuestions ? ['Frågor'] : []),
+  ...(hasCustomQuestions ? ['Utförarens frågor'] : []),
+  'Bekräfta'
+]
+const totalSteps = STEPS.length
 
   const handleSubmit = async () => {
     if (!user) return
@@ -84,6 +101,7 @@ function OrderModal({
         buyerPhone: phone,
         message,
         answers,
+        customAnswers,
         status: 'pending',
         createdAt: serverTimestamp(),
       })
@@ -95,14 +113,18 @@ function OrderModal({
     }
   }
 
-  const canProceed = () => {
-    if (step === 0) return name && email
-    if (step === 1 && questions.length > 0) {
-      const required = questions.filter(q => q.required)
-      return required.every(q => answers[q.id])
-    }
-    return true
+const canProceed = () => {
+  if (step === 0) return name && email
+  if (STEPS[step] === 'Frågor') {
+    const required = subcategoryQuestions.filter(q => q.required)
+    return required.every(q => answers[q.id])
   }
+  if (STEPS[step] === 'Utförarens frågor') {
+    const required = customQuestions.filter(q => q.required)
+    return required.every(q => customAnswers[q.id])
+  }
+  return true
+}
 
   return (
     <div className="order-overlay" onClick={onClose}>
@@ -168,13 +190,13 @@ function OrderModal({
             )}
 
             {/* Steg 2 – Anpassade frågor */}
-            {step === 1 && questions.length > 0 && (
+            {step === 1 && subcategoryQuestions.length > 0 && (
               <div className="order-modal__fields">
                 <p className="order-modal__step-hint">
                   Besvara frågorna så utföraren kan förbereda sig.
                 </p>
 
-                {questions.map(q => (
+                {subcategoryQuestions.map(q => (
                   <div key={q.id} className="order-modal__field">
                     <label className="order-modal__label">
                       {q.label} {q.required && <span className="order-modal__required">*</span>}
@@ -206,6 +228,50 @@ function OrderModal({
                         placeholder={q.placeholder}
                         value={answers[q.id] || ''}
                         onChange={e => setAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+              
+            )}
+            {/* Utförarens egna frågor */}
+            {STEPS[step] === 'Utförarens frågor' && (
+              <div className="order-modal__fields">
+                <p className="order-modal__step-hint">
+                  Utföraren vill veta lite mer om ditt uppdrag.
+                </p>
+
+                {customQuestions.map(q => (
+                  <div key={q.id} className="order-modal__field">
+                    <label className="order-modal__label">
+                      {q.label} {q.required && <span style={{ color: 'var(--color-orange)' }}>*</span>}
+                    </label>
+
+                    {q.type === 'select' ? (
+                      <select
+                        className="order-modal__input order-modal__select"
+                        value={customAnswers[q.id] || ''}
+                        onChange={e => setCustomAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
+                      >
+                        <option value="">Välj...</option>
+                        {q.options?.map(opt => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
+                      </select>
+                    ) : q.type === 'textarea' ? (
+                      <textarea
+                        className="order-modal__textarea"
+                        value={customAnswers[q.id] || ''}
+                        onChange={e => setCustomAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
+                        rows={3}
+                      />
+                    ) : (
+                      <input
+                        className="order-modal__input"
+                        type="text"
+                        value={customAnswers[q.id] || ''}
+                        onChange={e => setCustomAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
                       />
                     )}
                   </div>
